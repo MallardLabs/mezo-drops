@@ -13,13 +13,13 @@ Ball size and color coresponds to the transaction amount.
 Click on the spheres to see the transaction details.
 
 
-White: 0 BTC
+Mezo Red: 0 BTC
 
-White with a tinge of Mezo Red: 0 - 0.0001 BTC
+Light tint of Mezo Red: 0 - 0.0001 BTC
 
-Even more Mezo Red: 0.0001 - 0.1 BTC
+Even lighter Mezo Red: 0.0001 - 0.1 BTC
 
-Mostly Mezo Red: 0.1 - 10 BTC
+Very light Mezo Red: 0.1 - 10 BTC
 
-Mezo Red: > 10 BTC
+Near white Mezo Red: > 10 BTC
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Superposition Testnet Drops - Transaction Visualizer</title>
-  <meta name="description" content="A physics visualizer for the Superposition testnet"/>
-  <meta name="keywords" content="superposition, spn, blockchain, transaction, visualizer, drops, network, tps, volume, tx, crypto, simulation"/>
+  <title>Mezo Matsnet Drops - Transaction Visualizer</title>
+  <meta name="description" content="A physics visualizer for Mezo Matsnet"/>
+  <meta name="keywords" content="mezo, matsnet, blockchain, transaction, visualizer, drops, network, tps, volume, tx, crypto, simulation"/>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="stylesheet" href="style.css">
@@ -12,7 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Superposition Testnet Drops" />
+  <meta name="apple-mobile-web-app-title" content="Mezo Matsnet Drops" />
   <link rel="manifest" href="/site.webmanifest" />
 
   <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
@@ -20,21 +20,21 @@
   <meta http-equiv="pragma" content="no-cache">
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Superposition Testnet Drops" />
-  <meta name="twitter:image" content="https://test-spn.drops.mallardlabs.xyz/ogx.png" />
+  <meta name="twitter:title" content="Mezo Matsnet Drops" />
+  <meta name="twitter:image" content="https://test-mezo.drops.mallardlabs.xyz/ogx.png" />
   <meta name="twitter:domain" content="Mallard Labs" />
   <meta name="twitter:site" content="@mallardlabs" />
   <meta name="twitter:creator" content="@mallardlabs" />
-  <meta name="twitter:description" content="A physics visualizer for the Superposition testnet" />
-  <meta property="og:title" content="Superposition Testnet Drops" />
-  <meta property="og:description" content="A physics visualizer for the Superposition testnet" />
-  <meta property="og:image" content="https://test-spn.drops.mallardlabs.xyz/og.png" />
-  <meta property="og:url" content="https://test-spn.drops.mallardlabs.xyz" />
+  <meta name="twitter:description" content="A physics visualizer for Mezo Matsnet" />
+  <meta property="og:title" content="Mezo Matsnet Drops" />
+  <meta property="og:description" content="A physics visualizer for Mezo Matsnet" />
+  <meta property="og:image" content="https://test-mezo.drops.mallardlabs.xyz/og.png" />
+  <meta property="og:url" content="https://test-mezo.drops.mallardlabs.xyz" />
 </head>
 <body>
   <div id="toggle-container"></div>
   <a id="about-link" href="index.html#" id="info-button">?</a>
-  <a id="github-link" href="https://github.com/MallardLabs/testnet-spn-drops" target="_blank">
+  <a id="github-link" href="https://github.com/MallardLabs/testnet-mezo-drops" target="_blank">
     <svg id="github-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
       viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
     <style type="text/css">
@@ -58,23 +58,23 @@
         <!--<span class="address"><strong>Donation: ETH ADDRESS from old owner was here</strong></span><br/><br/>-->
         <h2>How does it work?</h2>
         <span class="explain">
-          Transactions are recorded live from the Superposition testnet network using a public RPC.<br/>
+          Transactions are recorded live from the Mezo matsnet network using a public RPC.<br/>
           Ball size and color coresponds to the transaction amount.<br/>
           Click on the spheres to see the transaction details.<br/><br/>
-          Conduit Blue: 0 SPN<br/>
-          Less Blue: 0 - 1 SPN<br/>
-          Even less Blue: 1 - 1,000 SPN<br/>
-          White with a tinge of blue: 1,000 - 100,000 SPN<br/>
-          White: > 100,000 SPN<br/><br/>
+          Mezo Red: 0 BTC<br/>
+          Light tint of Mezo Red: 0 - 0.0001 BTC<br/>
+          Even lighter Mezo Red: 0.0001 - 0.1 BTC<br/>
+          Very light Mezo Red: 0.1 - 10 BTC<br/>
+          Near white Mezo Red: > 10 BTC<br/><br/>
           Forked from <a href="https://github.com/paintoshi/sonic-drops" target="_blank" rel="noopener noreferrer">Paintoshi's Sonic Drops</a><br/><br/>
-        <p class="address"><a href="https://github.com/MallardLabs/testnet-spn-drops" target="_blank">Github Source</a></p><br/>
+        <p class="address"><a href="https://github.com/MallardLabs/testnet-mezo-drops" target="_blank">Github Source</a></p><br/>
       </span>
         <p><a href="#" id="close-button">CLOSE</a></p>
           </div>
     </div>
   </div>
   <div style="display: none;">
-    <svg id="platform-logo" data-name="platform-logo" xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 950 750">
+    <svg id="platform-logo" data-name="platform-logo" xmlns="http://www.w3.org/2000/svg" viewBox="40 -100 500 500">
       <defs>
         <style>
           .cls-1 {
@@ -84,7 +84,7 @@
         </style>
       </defs>
       <g id="Layer_1-2" data-name="Layer 1" transform="translate(100, 100)">
-        <path class="cls-1" d="m541.88,0H0v495.29h98.89l79.65-103.74c14.51-18.9,22.38-42.07,22.38-65.9v-153.79c0-5.82,7.15-8.73,11.32-4.6l47.56,56.13h87.74l52.36-57.11c4.23-3.89,11.14-.94,11.14,4.77v150l1.79,174.24h129.05V0Z"/>
+        <path d="M114.94 142.08L146.44 110.58V110.44L177.79 141.94C186.85 151 197.93 155.03 208.86 155.03C231.73 155.03 253.73 137.2 253.73 110.44L285.08 141.94C294.14 151 305.22 155.03 316.15 155.03C339.02 155.03 361.02 137.2 361.02 110.44H334.12L302.77 79.09C293.71 70.03 282.49 66 271.56 66C248.69 66 226.83 83.69 226.83 110.44L195.48 79.09C186.42 70.03 175.2 66 164.27 66C141.4 66 119.54 83.69 119.54 110.44L39 110.58C39 137.48 61.29 154.88 84.16 154.88C95.09 154.88 106.17 150.85 114.94 142.08Z" fill="#FFFFFF"/>
       </g>
     </svg>
     
