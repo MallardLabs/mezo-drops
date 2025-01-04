@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Superposition Testnet Drops - Transaction Visualizer</title>
+  <meta name="description" content="A physics visualizer for the Superposition testnet"/>
+  <meta name="keywords" content="superposition, spn, blockchain, transaction, visualizer, drops, network, tps, volume, tx, crypto, simulation"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Superposition Testnet Drops" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="pragma" content="no-cache">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Superposition Testnet Drops" />
+  <meta name="twitter:image" content="https://test-spn.drops.mallardlabs.xyz/ogx.png" />
+  <meta name="twitter:domain" content="Mallard Labs" />
+  <meta name="twitter:site" content="@mallardlabs" />
+  <meta name="twitter:creator" content="@mallardlabs" />
+  <meta name="twitter:description" content="A physics visualizer for the Superposition testnet" />
+  <meta property="og:title" content="Superposition Testnet Drops" />
+  <meta property="og:description" content="A physics visualizer for the Superposition testnet" />
+  <meta property="og:image" content="https://test-spn.drops.mallardlabs.xyz/og.png" />
+  <meta property="og:url" content="https://test-spn.drops.mallardlabs.xyz" />
+</head>
+<body>
+  <div id="toggle-container"></div>
+  <a id="about-link" href="index.html#" id="info-button">?</a>
+  <a id="github-link" href="https://github.com/MallardLabs/testnet-spn-drops" target="_blank">
+    <svg id="github-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+    <style type="text/css">
+      .st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+    </style>
+    <g>
+      <path class="st0" d="M296.1,354.2c49.9-5.9,102.9-24,102.9-110.2c0-24.5-8.6-44.4-22.7-59.9c2.3-5.9,9.5-28.1-2.7-58.9
+        c0,0-18.1-5.9-60.8,22.7c-18.1-5-38.1-8.2-56.7-8.2c-19.1,0-39,3.2-56.7,8.2c-43.1-28.6-61.2-22.7-61.2-22.7
+        c-12.2,30.8-5,53.1-2.7,58.9c-14.1,15.4-22.7,35.4-22.7,59.9c0,86.2,53.1,104.3,102.9,110.2c-6.3,5.5-12.2,15.9-14.5,30.4
+        c-12.7,5.4-45.8,15.9-65.8-18.6c0,0-11.8-21.3-34-22.7c0,0-22.2-0.5-1.8,13.6c0,0,15,6.8,24.9,32.7c0,0,13.6,43.1,76.2,29.5v38.5
+        c0,5.9-4.5,12.7-15.9,10.9C96.1,439,32.2,354.6,32.2,255.8c0-123.8,100.2-224,224-224c123.3,0,224,100.2,223.6,224
+        c0,98.9-63.9,182.8-152.8,212.7c-11.3,2.3-15.9-4.5-15.9-10.9v-62.1C311.1,374.6,304.3,361,296.1,354.2L296.1,354.2z M512,256.2
+        C512,114.7,397.3,0,256.2,0C114.7,0,0,114.7,0,256.2C0,397.3,114.7,512,256.2,512C397.3,512,512,397.3,512,256.2L512,256.2z"/>
+    </g>
+    </svg>
+  </a>
+  <div id="info" class="hidden">
+    <div id="content">
+        <div id="content-background">
+        <h1>Superposition Drops</h1><br />
+        <!--<span class="address"><strong>Donation: ETH ADDRESS from old owner was here</strong></span><br/><br/>-->
+        <h2>How does it work?</h2>
+        <span class="explain">
+          Transactions are recorded live from the Superposition testnet network using a public RPC.<br/>
+          Ball size and color coresponds to the transaction amount.<br/>
+          Click on the spheres to see the transaction details.<br/><br/>
+          Conduit Blue: 0 SPN<br/>
+          Less Blue: 0 - 1 SPN<br/>
+          Even less Blue: 1 - 1,000 SPN<br/>
+          White with a tinge of blue: 1,000 - 100,000 SPN<br/>
+          White: > 100,000 SPN<br/><br/>
+          Forked from <a href="https://github.com/paintoshi/sonic-drops" target="_blank" rel="noopener noreferrer">Paintoshi's Sonic Drops</a><br/><br/>
+        <p class="address"><a href="https://github.com/MallardLabs/testnet-spn-drops" target="_blank">Github Source</a></p><br/>
+      </span>
+        <p><a href="#" id="close-button">CLOSE</a></p>
+          </div>
+    </div>
+  </div>
+  <div style="display: none;">
+    <svg id="platform-logo" data-name="platform-logo" xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 950 750">
+      <defs>
+        <style>
+          .cls-1 {
+            fill: #1e1e1e;
+            stroke-width: 0px;
+          }
+        </style>
+      </defs>
+      <g id="Layer_1-2" data-name="Layer 1" transform="translate(100, 100)">
+        <path class="cls-1" d="m541.88,0H0v495.29h98.89l79.65-103.74c14.51-18.9,22.38-42.07,22.38-65.9v-153.79c0-5.82,7.15-8.73,11.32-4.6l47.56,56.13h87.74l52.36-57.11c4.23-3.89,11.14-.94,11.14,4.77v150l1.79,174.24h129.05V0Z"/>
+      </g>
+    </svg>
+    
+  </div>
+  <div style="display: none;">
+    <svg id="external-link" data-name="external-link" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path id="Vector" d="M10.0002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002V15.8002C5 16.9203 5 17.4801 5.21799 17.9079C5.40973 18.2842 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8031C16.921 19 17.48 19 17.9074 18.7822C18.2837 18.5905 18.5905 18.2839 18.7822 17.9076C19 17.4802 19 16.921 19 15.8031V14M20 9V4M20 4H15M20 4L13 11" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div id="bottom-right-svg" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <a href="https://mallardlabs.xyz" target="_blank" rel="noopener noreferrer">
+      <img src="mallardlabs_logo.svg" alt="Mallard Labs Logo" class="mallard-svg" />
+    </a>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+  <script src="https://unpkg.com/three/examples/js/renderers/CSS2DRenderer.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="visualizer.js?v=1.0.5"></script>
+  <script>
+    window.ignoreZeroTransactions = false;
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the elements
+      const infoButton = document.getElementById('about-link');
+      const infoDiv = document.getElementById('info');
+      const closeButton = document.getElementById('close-button');
+
+      // Show info when ABOUT is clicked
+      infoButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          infoDiv.classList.remove('hidden');
+      });
+
+      // Hide info when CLOSE is clicked
+      closeButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          infoDiv.classList.add('hidden');
+      });
+  });
+  </script>
+</body>
+</html>
