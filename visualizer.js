@@ -38,7 +38,7 @@ const MAX_SPHERE_SIZE = 10;
 const MIN_SPHERE_SEGMENTS = 10; // Resolution
 const MAX_SPHERE_SEGMENTS = 40; // Resolution
 const BOUNCE_RESTITUTION = 0.4;
-const SELECTED_COLOR = 0xb92c89; // Magenta
+const SELECTED_COLOR = 0xffffff; // Magenta
 const GLOW_INTENSITY = 0.2;
 
 // Ground settings
