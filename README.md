@@ -1,6 +1,6 @@
 # mezo-drops
 
-Physical real-time simulation of transactions on the Mezo mainnet.
+Physical real-time simulation of blocks on the Mezo mainnet.
 
 This project is a fork of [sonic-drops](https://github.com/paintoshi/sonic-drops).  
 The original project is licensed under the MIT License and copyright (c) 2024 Paintoshi.  
@@ -8,10 +8,12 @@ This fork includes updated styling and migration from Sonic to Mezo mainnet by [
 
 ## How does it work?
 
-Transactions are recorded live from the Mezo mainnet using a public RPC.
+Blocks are recorded live from the Mezo mainnet using a public RPC.
 Ball size and color coresponds to the transaction amount.
 Click on the spheres to see the transaction details.
 
+
+### Note: below is N/A for this iteration w/ blocks instead of txs
 
 Mezo Red: 0 BTC
 
