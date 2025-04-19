@@ -24,7 +24,7 @@ const isVisibilitySupported = typeof document.hidden !== "undefined";
 window.sphereQueue = sphereQueue;
 
 // TX settings
-const RPC_URL = "https://mezonetwork.netlify.app/.netlify/functions/proxy";
+const RPC_URL = "https://mezoproxy.netlify.app/.netlify/functions/proxy";
 const BLOCK_EXPLORER = "https://explorer.mezo.org/block";
 const MIN_AMOUNT = 0.00001; // Min BTC
 const MAX_AMOUNT = 10; // Max BTC
