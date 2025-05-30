@@ -4,7 +4,7 @@ let spheres = [];
 let sphereBodies = [];
 let sphereQueue = [];
 let sphereData = [];
-let totalTxCount = 0;
+let BTC_sent = 0;
 let selectedSphereGlobal = null;
 let ground;
 let room;
@@ -24,8 +24,8 @@ const isVisibilitySupported = typeof document.hidden !== "undefined";
 window.sphereQueue = sphereQueue;
 
 // TX settings
-const RPC_URL = "https://mezoproxy.netlify.app/.netlify/functions/proxy";
-const BLOCK_EXPLORER = "https://explorer.mezo.org/block";
+const RPC_URL = "https://mainnet.mezo.public.validationcloud.io";
+const BLOCK_EXPLORER = "https://explorer.mezo.org/tx";
 const MIN_AMOUNT = 0.00001; // Min BTC
 const MAX_AMOUNT = 10; // Max BTC
 const TPS_WINDOW = 30000; // 30 seconds
@@ -40,7 +40,6 @@ const MAX_SPHERE_SEGMENTS = 40; // Resolution
 const BOUNCE_RESTITUTION = 0.4;
 const SELECTED_COLOR = 0xffffff; // Magenta
 const GLOW_INTENSITY = 0.2;
-const MAX_TX_PER_BLOCK = 200; // cap tx count mapping for sphere size
 
 // Ground settings
 const TILT_START = MAX_SPHERES / 2;  // Start tilting at half max
@@ -182,7 +181,7 @@ function onSphereClick(event, canvas) {
         hit.material.emissiveIntensity = GLOW_INTENSITY;
         
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphere);
+          window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphere);
         }
       }
     }
@@ -206,14 +205,14 @@ function onMouseMove(event) {
       if (!window.isStatsHovered) {
         window.isStatsHovered = true;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     } else if (spheres.includes(hit)) {
       if (window.isStatsHovered) {
         window.isStatsHovered = false;
         if (window.updateStatsDisplay) {
-          window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
       canvas.style.cursor = 'pointer';
@@ -232,7 +231,7 @@ function onMouseMove(event) {
     if (window.isStatsHovered) {
       window.isStatsHovered = false;
       if (window.updateStatsDisplay) {
-        window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
+        window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
       }
     }
     canvas.style.cursor = 'default';
@@ -413,9 +412,9 @@ function createMainStatsTexture() {
     const xAdjustment = 6;
     const yAdjustment = canvas.height / 35;
     ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-    ctx.fillText(`Transactions: ${totalSent.toLocaleString('en-US')}`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
+    ctx.fillText(`Volume: ${Math.floor(totalSent * 100000000).toLocaleString('en-US')} sats`, canvas.width/2 + xAdjustment, canvas.height/4 - yAdjustment);
     ctx.fillText(`Balls/Queue: ${ballCount}/${currentQueueCount}`, canvas.width/2 + xAdjustment, canvas.height / 2 - yAdjustment);
-    ctx.fillText(`BPS: ${tps}`, canvas.width/2 + xAdjustment, canvas.height * 3/4 - yAdjustment);
+    ctx.fillText(`TPS: ${tps}`, canvas.width/2 + xAdjustment, canvas.height * 3/4 - yAdjustment);
     
     return new THREE.CanvasTexture(canvas);
   }
@@ -572,11 +571,11 @@ function createStatsDisplay() {
   scene.add(selectedTxPlane);
 
   // Store reference to update both displays
-  window.updateStatsDisplay = (totalTxCountArg, ballCount, tps, selectedSphere) => {
+  window.updateStatsDisplay = (totalSent, ballCount, tps, selectedSphere) => {
     selectedSphereGlobal = selectedSphere;
     
     // Update main stats
-    const newMainTexture = mainStatsTexture.update(totalTxCountArg, ballCount, tps);
+    const newMainTexture = mainStatsTexture.update(totalSent, ballCount, tps);
     mainMaterial.map = newMainTexture;
     mainMaterial.needsUpdate = true;
     
@@ -840,11 +839,22 @@ async function createGround() {
 
 // Create a sphere based on transaction amount
 function createSphere(amount, txHash) {
-  // Scale sphere size by transaction count (0 tx → min, 200+ → max) with sqrt mapping so 1 tx is noticeable
-  const clampedTx = Math.min(amount, MAX_TX_PER_BLOCK);
-  const t = clampedTx / MAX_TX_PER_BLOCK;
-  const size = MIN_SPHERE_SIZE + Math.sqrt(t) * (MAX_SPHERE_SIZE - MIN_SPHERE_SIZE);
+  // Scale the size based on amount (MIN_AMOUNT = smallest, MAX_AMOUNT = largest)
+  const logMin = Math.log10(MIN_AMOUNT);
+  const logMax = Math.log10(MAX_AMOUNT);
+  const logAmount = Math.log10(Math.max(MIN_AMOUNT, Math.min(MAX_AMOUNT, amount)));
   
+  // Get basic 0-1 normalization
+  const normalizedSize = (logAmount - logMin) / (logMax - logMin);
+  
+  // Apply cubic power to favor smaller sizes
+  // Higher power = more small spheres, fewer large ones
+  const weightedSize = Math.pow(normalizedSize, 3);
+  
+  // Map to final size range (0.4 to 12.4)
+  const size = MIN_SPHERE_SIZE + (weightedSize * MAX_SPHERE_SIZE);
+  
+  // Rest of the createSphere function remains the same...
   // Dynamically less bouncy for large spheres
   const restitution = (Math.log10(size) - Math.log10(MIN_SPHERE_SIZE)) / (Math.log10(MAX_SPHERE_SIZE) - Math.log10(MIN_SPHERE_SIZE));
   const dynamicRestitution = BOUNCE_RESTITUTION * (1 - restitution);
@@ -878,9 +888,14 @@ function createSphere(amount, txHash) {
   // Determine sphere color based on amount
   let sphereColor;
 
-  // Use t for normalized segments/color mapping
-  const normalizedAmount = t;
-  
+  // Get normalized value between 0 and 1 based on amount
+  let normalizedAmount;
+  if (amount === 0) {
+    normalizedAmount = 0;
+  } else {
+    normalizedAmount = (logAmount - logMin) / (logMax - logMin);
+  }
+
   // Calculate segments - scale between min and max segments
   const segmentSize = Math.round(MIN_SPHERE_SEGMENTS + (normalizedAmount * (MAX_SPHERE_SEGMENTS - MIN_SPHERE_SEGMENTS)));
   if (amount > 1) {
@@ -1025,7 +1040,7 @@ async function getLatestBlocksAndTransactions() {
     const blocksData = await blocksResponse.json();
     
     // Process all blocks from the batch response
-    const newBlocks = [];
+    const newTransactions = [];
     
     for (const result of blocksData) {
       const block = result.result;
@@ -1045,15 +1060,19 @@ async function getLatestBlocksAndTransactions() {
         processedBlockHashes.delete(oldestHash);
       }
 
-      // Enqueue block metadata
-      newBlocks.push({
-        hash: block.hash,
-        txCount: block.transactions ? block.transactions.length : 0,
-        number: parseInt(block.number, 16)
-      });
+      // Add transactions from this block
+      if (block.transactions?.length > 0) {
+        newTransactions.push(...block.transactions.map(tx => ({
+          hash: tx.hash,
+          amount: parseInt(tx.value, 16) / 1e18,
+          subtype: tx.to ? 'send' : 'contract_creation',
+          blockHash: block.hash,
+          blockNumber: parseInt(block.number, 16)
+        })));
+      }
     }
 
-    return newBlocks.length > 0 ? newBlocks : null;
+    return newTransactions.length > 0 ? newTransactions : null;
 
   } catch (error) {
     console.error('Error fetching blockchain data:', error);
@@ -1069,9 +1088,9 @@ function pollForNewBlocks() {
   async function poll() {
     if (!isPolling) return;
 
-    const blocks = await getLatestBlocksAndTransactions();
-    if (blocks) {
-      blocks.forEach(processBlock);
+    const transactions = await getLatestBlocksAndTransactions();
+    if (transactions) {
+      transactions.forEach(processTransaction);
     }
 
     setTimeout(poll, 600);
@@ -1090,7 +1109,7 @@ function processTransaction(txData) {
   }
   
   // Add to total BTC sent
-  totalTxCount += txData.amount;
+  BTC_sent += txData.amount;
   
   // Add to queue if not full
   if (sphereQueue.length < MAX_QUEUE_SIZE) {
@@ -1103,29 +1122,11 @@ function processTransaction(txData) {
   // Update stats display immediately after queue change
   if (window.updateStatsDisplay) {
     requestAnimationFrame(() => {
-      window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
+      window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
     });
   }
 }
 
-// Process new block and enqueue sphere
-function processBlock(blockData) {
-  totalTxCount += blockData.txCount;
-  if (sphereQueue.length < MAX_QUEUE_SIZE) {
-    sphereQueue.push({
-      hash: blockData.hash,
-      amount: blockData.txCount,
-      subtype: 'block',
-      blockNumber: blockData.number
-    });
-  }
-  transactionTimes.push(Date.now());
-  if (window.updateStatsDisplay) {
-    requestAnimationFrame(() => {
-      window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
-    });
-  }
-}
 
 // Separate loop for sphere creation
 function startSphereCreationLoop() {
@@ -1156,7 +1157,7 @@ function startSphereCreationLoop() {
         lastSphereCreateTime = currentTime;
         
         if (window.updateStatsDisplay && currentTime - lastSphereCreateTime >= 500) {
-          window.updateStatsDisplay(totalTxCount, spheres.length, calculateTPS(), selectedSphereGlobal);
+          window.updateStatsDisplay(BTC_sent, spheres.length, calculateTPS(), selectedSphereGlobal);
         }
       }
     }
